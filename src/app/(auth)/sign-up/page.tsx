@@ -1,10 +1,12 @@
+"use client"
+import SignupCard from '@/features/auth/components/SignupCard'
 import React from 'react'
 
 type Props = {}
 
 const page = (props: Props) => {
   return (
-    <div>page</div>
+    <div><SignupCard/></div>
   )
 }
 export default page
