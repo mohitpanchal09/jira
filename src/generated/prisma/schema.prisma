@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int         @id @default(autoincrement())
+  email       String      @unique
+  username    String      @unique
+  firstname   String?
+  password    String?
+  lastname    String?
+  createdAt   DateTime    @default(now())
+  workspace   Workspace[]
+  memberships Member[]
+  project     Project[]
+  tasks       Task[]
+}
+
+model Workspace {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  name       String
+  image      String?
+  inviteCode String
+  user       User      @relation(fields: [userId], references: [id])
+  member     Member[]
+  project    Project[]
+  tasks      Task[] // Inverse of Task.workspace
+}
+
+model Member {
+  id          Int       @id @default(autoincrement())
+  workspaceId Int
+  userId      Int
+  role        Role      @default(MEMBER)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  name        String
+  workspaceId Int
+  userId      Int
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  image       String?
+  user        User      @relation(fields: [userId], references: [id])
+  tasks       Task[] // Inverse of Task.project
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  name        String
+  workspaceId Int
+  projectId   Int
+  assigneeId  Int
+  description String
+  dueDate     DateTime
+  status      Status   @default(TODO)
+  position    Int
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee  User      @relation(fields: [assigneeId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum Status {
+  BACKLOG
+  TODO
+  IN_REVIEW
+  DONE
+  IN_PROGRESS
+}
