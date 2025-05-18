@@ -2,7 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 type Props = {
-  name: string;
+  name: string | null;
   className?: string;
   fallbackClassName?: string;
 };
@@ -21,7 +21,7 @@ function MemberAvatar({ name, className, fallbackClassName }: Props) {
           fallbackClassName
         )}
       >
-        {name.charAt(0).toUpperCase()}
+        { name ? name.charAt(0).toUpperCase() :""}
       </AvatarFallback>
     </Avatar>
   );

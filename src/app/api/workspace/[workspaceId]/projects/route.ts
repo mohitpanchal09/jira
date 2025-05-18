@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { prisma } from "@/lib/db";
 import { uploadToS3 } from "@/lib/s3";
 import { createProject, getProjects } from "@/services/projectService";

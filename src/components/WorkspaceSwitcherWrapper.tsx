@@ -1,15 +1,15 @@
 // app/components/WorkspaceSwitcherWrapper.tsx
-import { AuthOptions, getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"; 
-import { getWorkspaces } from "@/services/workspaceService";
+'use client'
+import useSWR from 'swr';
 import WorkspaceSwitcher, { Workspace } from "./WorkspaceSwitcher";
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default async function WorkspaceSwitcherWrapper() {
-  const session = await getServerSession(authOptions as AuthOptions);
-  let workspaces:Workspace[] =[]
-    workspaces = session?.user?.id
-    ? await getWorkspaces(session.user.id)
-    : [];
+export default function WorkspaceSwitcherWrapper() {
+  const { data: workspaces, error, isLoading } = useSWR('/api/workspace', fetcher);
+  console.log("🚀 ~ WorkspaceSwitcherWrapper ~ workspaces:", workspaces)
 
-  return <WorkspaceSwitcher workspaces={workspaces} />;
+  if (error) return <div>Failed to load workspaces</div>;
+  if (isLoading) return <div></div>;
+
+  return <WorkspaceSwitcher workspaces={workspaces.workspaces || []} />;
 }

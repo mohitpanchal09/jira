@@ -1,3 +1,5 @@
+import { Status } from "@/generated/prisma"
+
 export enum UserRole{
     ADMIN = "ADMIN" ,
     MEMBER ="MEMBER"
@@ -5,23 +7,41 @@ export enum UserRole{
 
 export type Workspace = {
     name:string,
-    image?: any,
+    image?: string | null,
     userId:number,
     id:number,
     inviteCode?:string | null
 }
 export type Project = {
     name:string,
-    image?: any,
+    image?: string | null,
     userId:number,
     workspaceId:number,
     id:number,
 }
 
-export enum Status {
-  BACKLOG = "BACKLOG",
-  TODO = "TODO",
-  IN_REVIEW = "IN_REVIEW",
-  IN_PROGRESS = "IN_PROGRESS",
-  DONE = "DONE"
+export type User = {
+    id:number,
+    email:string,
+    username:string | null,
+    firstname?:string | null,
+    lastname?:string | null,
+    createdAt:Date,
+    password?:string | null
 }
+
+export type Task = {
+    name:string,
+    assigneeId:number,
+    workspaceId:number,
+    id:number,
+    description:string,
+    projectId:number,
+    assignee:User,
+    project:Project,
+    position:number,
+    dueDate:Date
+    status:Status
+}
+
+export { Status };

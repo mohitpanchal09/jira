@@ -2,7 +2,7 @@ import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "./ui/avatar"
 type Props = {
-    image?:string,
+    image?:string | null,
     name:string,
     className?:string
     fallbackClassname?:string

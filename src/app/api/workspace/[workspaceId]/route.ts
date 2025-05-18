@@ -2,8 +2,8 @@ import { uploadToS3 } from "@/lib/s3";
 import { deleteWorkspace, resetWorkspaceInviteLink, updateWorkspace } from "@/services/workspaceService";
 import { AuthOptions, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import { prisma } from "@/lib/db";
+import { authOptions } from "../../auth/[...nextauth]/authOptions";
 
 export async function PATCH(req: NextRequest,  { params }: { params: { workspaceId: string } }) {
     try {

@@ -14,6 +14,7 @@ export default function layout({ children }: DashboardLayoutProps) {
       <CreateWorkspaceModal/>
       <CreateProjectModal/>
       <CreateTaskModal/>
+      
       <div className="flex w-full h-full">
         <div className="fixed left-0 top-0 hidden lg:block lg:w-[264px] h-full overflow-y-auto">
             <Sidebar/>

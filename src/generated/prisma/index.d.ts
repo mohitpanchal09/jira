@@ -6069,6 +6069,7 @@ export namespace Prisma {
     dueDate: Date | null
     status: $Enums.Status | null
     position: number | null
+    createdAt: Date | null
   }
 
   export type TaskMaxAggregateOutputType = {
@@ -6081,6 +6082,7 @@ export namespace Prisma {
     dueDate: Date | null
     status: $Enums.Status | null
     position: number | null
+    createdAt: Date | null
   }
 
   export type TaskCountAggregateOutputType = {
@@ -6093,6 +6095,7 @@ export namespace Prisma {
     dueDate: number
     status: number
     position: number
+    createdAt: number
     _all: number
   }
 
@@ -6123,6 +6126,7 @@ export namespace Prisma {
     dueDate?: true
     status?: true
     position?: true
+    createdAt?: true
   }
 
   export type TaskMaxAggregateInputType = {
@@ -6135,6 +6139,7 @@ export namespace Prisma {
     dueDate?: true
     status?: true
     position?: true
+    createdAt?: true
   }
 
   export type TaskCountAggregateInputType = {
@@ -6147,6 +6152,7 @@ export namespace Prisma {
     dueDate?: true
     status?: true
     position?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -6246,6 +6252,7 @@ export namespace Prisma {
     dueDate: Date
     status: $Enums.Status
     position: number
+    createdAt: Date
     _count: TaskCountAggregateOutputType | null
     _avg: TaskAvgAggregateOutputType | null
     _sum: TaskSumAggregateOutputType | null
@@ -6277,6 +6284,7 @@ export namespace Prisma {
     dueDate?: boolean
     status?: boolean
     position?: boolean
+    createdAt?: boolean
     workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     assignee?: boolean | UserDefaultArgs<ExtArgs>
@@ -6292,6 +6300,7 @@ export namespace Prisma {
     dueDate?: boolean
     status?: boolean
     position?: boolean
+    createdAt?: boolean
     workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     assignee?: boolean | UserDefaultArgs<ExtArgs>
@@ -6307,6 +6316,7 @@ export namespace Prisma {
     dueDate?: boolean
     status?: boolean
     position?: boolean
+    createdAt?: boolean
     workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     assignee?: boolean | UserDefaultArgs<ExtArgs>
@@ -6322,9 +6332,10 @@ export namespace Prisma {
     dueDate?: boolean
     status?: boolean
     position?: boolean
+    createdAt?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "workspaceId" | "projectId" | "assigneeId" | "description" | "dueDate" | "status" | "position", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "workspaceId" | "projectId" | "assigneeId" | "description" | "dueDate" | "status" | "position" | "createdAt", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -6358,6 +6369,7 @@ export namespace Prisma {
       dueDate: Date
       status: $Enums.Status
       position: number
+      createdAt: Date
     }, ExtArgs["result"]["task"]>
     composites: {}
   }
@@ -6793,6 +6805,7 @@ export namespace Prisma {
     readonly dueDate: FieldRef<"Task", 'DateTime'>
     readonly status: FieldRef<"Task", 'Status'>
     readonly position: FieldRef<"Task", 'Int'>
+    readonly createdAt: FieldRef<"Task", 'DateTime'>
   }
     
 
@@ -7275,7 +7288,8 @@ export namespace Prisma {
     description: 'description',
     dueDate: 'dueDate',
     status: 'status',
-    position: 'position'
+    position: 'position',
+    createdAt: 'createdAt'
   };
 
   export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -7670,6 +7684,7 @@ export namespace Prisma {
     dueDate?: DateTimeFilter<"Task"> | Date | string
     status?: EnumStatusFilter<"Task"> | $Enums.Status
     position?: IntFilter<"Task"> | number
+    createdAt?: DateTimeFilter<"Task"> | Date | string
     workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     assignee?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -7685,6 +7700,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     status?: SortOrder
     position?: SortOrder
+    createdAt?: SortOrder
     workspace?: WorkspaceOrderByWithRelationInput
     project?: ProjectOrderByWithRelationInput
     assignee?: UserOrderByWithRelationInput
@@ -7703,6 +7719,7 @@ export namespace Prisma {
     dueDate?: DateTimeFilter<"Task"> | Date | string
     status?: EnumStatusFilter<"Task"> | $Enums.Status
     position?: IntFilter<"Task"> | number
+    createdAt?: DateTimeFilter<"Task"> | Date | string
     workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     assignee?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -7718,6 +7735,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     status?: SortOrder
     position?: SortOrder
+    createdAt?: SortOrder
     _count?: TaskCountOrderByAggregateInput
     _avg?: TaskAvgOrderByAggregateInput
     _max?: TaskMaxOrderByAggregateInput
@@ -7738,6 +7756,7 @@ export namespace Prisma {
     dueDate?: DateTimeWithAggregatesFilter<"Task"> | Date | string
     status?: EnumStatusWithAggregatesFilter<"Task"> | $Enums.Status
     position?: IntWithAggregatesFilter<"Task"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -7992,6 +8011,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
     workspace: WorkspaceCreateNestedOneWithoutTasksInput
     project: ProjectCreateNestedOneWithoutTasksInput
     assignee: UserCreateNestedOneWithoutTasksInput
@@ -8007,6 +8027,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
   }
 
   export type TaskUpdateInput = {
@@ -8015,6 +8036,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workspace?: WorkspaceUpdateOneRequiredWithoutTasksNestedInput
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     assignee?: UserUpdateOneRequiredWithoutTasksNestedInput
@@ -8030,6 +8052,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TaskCreateManyInput = {
@@ -8042,6 +8065,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
   }
 
   export type TaskUpdateManyMutationInput = {
@@ -8050,6 +8074,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TaskUncheckedUpdateManyInput = {
@@ -8062,6 +8087,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -8417,6 +8443,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     status?: SortOrder
     position?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TaskAvgOrderByAggregateInput = {
@@ -8437,6 +8464,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     status?: SortOrder
     position?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TaskMinOrderByAggregateInput = {
@@ -8449,6 +8477,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     status?: SortOrder
     position?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TaskSumOrderByAggregateInput = {
@@ -9196,6 +9225,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
     workspace: WorkspaceCreateNestedOneWithoutTasksInput
     project: ProjectCreateNestedOneWithoutTasksInput
   }
@@ -9209,6 +9239,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
   }
 
   export type TaskCreateOrConnectWithoutAssigneeInput = {
@@ -9330,6 +9361,7 @@ export namespace Prisma {
     dueDate?: DateTimeFilter<"Task"> | Date | string
     status?: EnumStatusFilter<"Task"> | $Enums.Status
     position?: IntFilter<"Task"> | number
+    createdAt?: DateTimeFilter<"Task"> | Date | string
   }
 
   export type UserCreateWithoutWorkspaceInput = {
@@ -9414,6 +9446,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
     project: ProjectCreateNestedOneWithoutTasksInput
     assignee: UserCreateNestedOneWithoutTasksInput
   }
@@ -9427,6 +9460,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
   }
 
   export type TaskCreateOrConnectWithoutWorkspaceInput = {
@@ -9703,6 +9737,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
     workspace: WorkspaceCreateNestedOneWithoutTasksInput
     assignee: UserCreateNestedOneWithoutTasksInput
   }
@@ -9716,6 +9751,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
   }
 
   export type TaskCreateOrConnectWithoutProjectInput = {
@@ -10005,6 +10041,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
   }
 
   export type WorkspaceUpdateWithoutUserInput = {
@@ -10078,6 +10115,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workspace?: WorkspaceUpdateOneRequiredWithoutTasksNestedInput
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
   }
@@ -10091,6 +10129,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TaskUncheckedUpdateManyWithoutAssigneeInput = {
@@ -10102,6 +10141,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberCreateManyWorkspaceInput = {
@@ -10126,6 +10166,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
   }
 
   export type MemberUpdateWithoutWorkspaceInput = {
@@ -10173,6 +10214,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     assignee?: UserUpdateOneRequiredWithoutTasksNestedInput
   }
@@ -10186,6 +10228,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TaskUncheckedUpdateManyWithoutWorkspaceInput = {
@@ -10197,6 +10240,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TaskCreateManyProjectInput = {
@@ -10208,6 +10252,7 @@ export namespace Prisma {
     dueDate: Date | string
     status?: $Enums.Status
     position: number
+    createdAt?: Date | string
   }
 
   export type TaskUpdateWithoutProjectInput = {
@@ -10216,6 +10261,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workspace?: WorkspaceUpdateOneRequiredWithoutTasksNestedInput
     assignee?: UserUpdateOneRequiredWithoutTasksNestedInput
   }
@@ -10229,6 +10275,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TaskUncheckedUpdateManyWithoutProjectInput = {
@@ -10240,6 +10287,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

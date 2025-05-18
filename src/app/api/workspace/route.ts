@@ -2,8 +2,8 @@ import { createWorkspace, getWorkspaces } from "@/services/workspaceService";
 import { workspaceSchema } from "@/validations/workspace.validations";
 import { AuthOptions, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
 import { uploadToS3 } from "@/lib/s3";
+import { authOptions } from "../auth/[...nextauth]/authOptions";
 
 export async function POST(req: NextRequest, res: NextResponse) {
     try {

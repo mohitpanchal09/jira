@@ -26,3 +26,31 @@ export async function getTasks(
         },
     });
 }
+
+export async function getWorkspaceTasks(
+    workspaceId: number,
+    filters: {
+        status?: string;
+        assigneeId?: number;
+        dueDate?: Date;
+        projectId?:number
+    }
+) {
+    return await prisma.task.findMany({
+        where: {
+            workspaceId,
+            ...(filters.status && { status: filters.status as Status }),
+            ...(filters.assigneeId && { assigneeId: filters.assigneeId }),
+            ...(filters.projectId && { projectId: filters.projectId }),
+            ...(filters.dueDate && {
+                dueDate: {
+                    equals: filters.dueDate,
+                },
+            }),
+        },
+        include: {
+            project: true,
+            assignee: true, // Ensure `assignee` relation exists in your Prisma schema
+        },
+    });
+}

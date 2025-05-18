@@ -1,7 +1,7 @@
-import { AuthOptions, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { AuthOptions, getServerSession } from "next-auth";
 import { prisma } from "@/lib/db";
+import { authOptions } from "../auth/[...nextauth]/authOptions";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,8 +12,8 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-
     const {
+      id,
       workspaceId,
       projectId,
       assigneeId,
@@ -22,12 +22,6 @@ export async function POST(req: NextRequest) {
       dueDate,
       status = "TODO",
     } = body;
-      console.log("🚀 ~ POST ~ dueDate:", dueDate)
-      console.log("🚀 ~ POST ~ description:", description)
-      console.log("🚀 ~ POST ~ name:", name)
-      console.log("🚀 ~ POST ~ assigneeId:", assigneeId)
-      console.log("🚀 ~ POST ~ projectId:", projectId)
-      console.log("🚀 ~ POST ~ workspaceId:", workspaceId)
 
     if (
       !name ||
@@ -48,45 +42,71 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Workspace not found" }, { status: 404 });
     }
 
-    const isAdmin = await prisma.member.findFirst({
+    const member = await prisma.member.findFirst({
       where: {
         workspaceId: Number(workspaceId),
         userId: session.user.id,
       },
     });
 
-    if (!isAdmin) {
+    if (!member) {
       return NextResponse.json({ message: "You are not a member" }, { status: 403 });
     }
 
-    if (isAdmin.role !== "ADMIN") {
+    if (member.role !== "ADMIN") {
       return NextResponse.json({ message: "You are not an admin" }, { status: 403 });
     }
 
-    const maxTask = await prisma.task.findFirst({
-      where: { projectId: Number(projectId) },
-      orderBy: { position: "desc" },
-      select: { position: true },
-    });
+    if (id) {
+      // Update logic
+      const existingTask = await prisma.task.findUnique({
+        where: { id: Number(id) },
+      });
 
-    const newPosition = maxTask ? maxTask.position + 1000 : 1000;
+      if (!existingTask) {
+        return NextResponse.json({ message: "Task not found" }, { status: 404 });
+      }
 
-    const task = await prisma.task.create({
-      data: {
-        name,
-        description,
-        dueDate: new Date(dueDate),
-        workspaceId: Number(workspaceId),
-        projectId: Number(projectId),
-        assigneeId: Number(assigneeId),
-        status,
-        position: newPosition,
-      },
-    });
+      const updatedTask = await prisma.task.update({
+        where: { id: Number(id) },
+        data: {
+          name,
+          description,
+          dueDate: new Date(dueDate),
+          assigneeId: Number(assigneeId),
+          status,
+          projectId: Number(projectId),
+        },
+      });
 
-    return NextResponse.json({ message: "Task created successfully", task }, { status: 201 });
+      return NextResponse.json({ message: "Task updated successfully", task: updatedTask }, { status: 200 });
+    } else {
+      // Create logic
+      const maxTask = await prisma.task.findFirst({
+        where: { projectId: Number(projectId) },
+        orderBy: { position: "desc" },
+        select: { position: true },
+      });
+
+      const newPosition = maxTask ? maxTask.position + 1000 : 1000;
+
+      const newTask = await prisma.task.create({
+        data: {
+          name,
+          description,
+          dueDate: new Date(dueDate),
+          workspaceId: Number(workspaceId),
+          projectId: Number(projectId),
+          assigneeId: Number(assigneeId),
+          status,
+          position: newPosition,
+        },
+      });
+
+      return NextResponse.json({ message: "Task created successfully", task: newTask }, { status: 201 });
+    }
   } catch (err) {
-    console.error("Task creation error:", err);
+    console.error("Task handler error:", err);
     return NextResponse.json(
       //@ts-ignore
       { message: "Something went wrong", error: err?.message || err },

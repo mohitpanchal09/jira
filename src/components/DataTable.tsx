@@ -3,7 +3,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -42,7 +41,6 @@ function DataTable({ data, title }: Props) {
   return (
     <>
       <Table>
-        {/* <TableCaption>{title}</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead>
@@ -75,17 +73,11 @@ function DataTable({ data, title }: Props) {
                 <span>Status</span>
               </div>
             </TableHead>
-            {/* <TableHead>
-              <div className="flex items-center gap-2">
-                <ChartCandlestick size={16} color="black" />
-                <span>Actions</span>
-              </div>
-            </TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
           {paginatedData.map((task: any) => (
-            <TableRow key={task.id || task.name}>
+            <TableRow key={task.id}>
               <TableCell className="font-medium">{task.name}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
@@ -103,9 +95,13 @@ function DataTable({ data, title }: Props) {
               <TableCell>
                 <TaskDate value={task.dueDate} />
               </TableCell>
-              <TableCell>{getStatusLabel(task.status)}</TableCell>
+              <TableCell>{getStatusLabel(task.status,"rounded-md")}</TableCell>
               <TableCell>
-                <TaskActions id={task.id} projectId={task.projectId}>
+                <TaskActions
+                  id={task.id}
+                  projectId={task.projectId}
+                  task={task}
+                >
                   <Button variant={"ghost"} className="size-8 p-0">
                     <MoreVertical className="size-4" />
                   </Button>

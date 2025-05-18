@@ -14,9 +14,9 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 
-type Props = {};
 
-function UserButton({}: Props) {
+
+function UserButton() {
   const { data: session, status } = useSession();
   const router = useRouter();
 

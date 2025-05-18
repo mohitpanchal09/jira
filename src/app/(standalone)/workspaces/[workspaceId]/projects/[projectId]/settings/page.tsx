@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions'
 import { EditProjectForm } from '@/components/EditProjectForm'
 import { getProjectById } from '@/services/projectService'
 import { AuthOptions, getServerSession } from 'next-auth'

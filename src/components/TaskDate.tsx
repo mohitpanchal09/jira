@@ -3,7 +3,7 @@ import { differenceInDays, format } from 'date-fns'
 import React from 'react'
 
 type Props = {
-    value:string,
+    value:string | Date,
     className?:string
 }
 

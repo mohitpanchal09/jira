@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import { AuthOptions, getServerSession } from "next-auth";
 import { prisma } from "@/lib/db";
 import { UserRole } from "@/types";
 import { deleteMember, updateMemberRole } from "@/services/memberService";
+import { authOptions } from "../../auth/[...nextauth]/authOptions";
 
 export async function PATCH(req: NextRequest, { params }: { params: { memberId: string } }) {
     try {

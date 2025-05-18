@@ -1,9 +1,48 @@
 import { AuthOptions, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import { prisma } from "@/lib/db";
 import { uploadToS3 } from "@/lib/s3";
 import { deleteProject, updateProject } from "@/services/projectService";
+import { authOptions } from "../../auth/[...nextauth]/authOptions";
+
+export async function GET(req: NextRequest, { params }: { params: { projectId: string } }) {
+    try {
+        const session = await getServerSession(authOptions as AuthOptions);
+
+        if (!session?.user?.id) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+
+        const projectId = Number(params.projectId);
+        if (isNaN(projectId)) {
+            return NextResponse.json({ message: "Invalid project ID" }, { status: 400 });
+        }
+
+        const project = await prisma.project.findUnique({
+            where: {
+                id: projectId
+            }
+        });
+
+        if (!project) {
+            return NextResponse.json({ message: "Project not found" }, { status: 404 });
+        }
+
+        if (project.userId !== session.user.id) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+
+        return NextResponse.json({ project }, { status: 200 });
+    } catch (err) {
+        console.error("Fetch project error:", err);
+        return NextResponse.json(
+            //@ts-ignore
+            { message: "Something went wrong", error: err?.message || err },
+            { status: 500 }
+        );
+    }
+}
+
 
 export async function PATCH(req: NextRequest, { params }: { params: { projectId: string } }) {
     try {

@@ -1,7 +1,8 @@
 import { Status } from "@/types";
 
-export const getStatusLabel = (status: Status) => {
-  const baseClasses = "text-sm text-white rounded-full py-1 px-4";
+export const getStatusLabel = (status: Status,className?:string) => {
+  console.log("🚀 ~ getStatusLabel ~ className:", className)
+  const baseClasses = `text-sm text-white ${className ? className: "rounded-full"} py-1 px-4`;
 
   switch (status) {
     case Status.BACKLOG:
