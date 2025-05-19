@@ -50,7 +50,7 @@ A **Jira-inspired project management app** where you can create **Workspaces**, 
 | **Backend**  | Next.js App Router (Fullstack)       |
 | **Database** | NeonTech’s Postgres (Serverless SQL) |
 | **Storage**  | AWS S3 (for image uploads)           |
-| **Auth**     | [Add if using Clerk/Auth.js/etc.]    |
+| **Auth**     | NextAuth                             |
 | **Styling**  | Tailwind CSS                         |
 | **State**    | Zustand / Context API (if used)      |
 
