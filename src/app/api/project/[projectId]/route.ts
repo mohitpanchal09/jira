@@ -28,10 +28,7 @@ export async function GET(req: NextRequest, { params }: { params: { projectId: s
             return NextResponse.json({ message: "Project not found" }, { status: 404 });
         }
 
-        if (project.userId !== session.user.id) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-        }
-
+        
         return NextResponse.json({ project }, { status: 200 });
     } catch (err) {
         console.error("Fetch project error:", err);
