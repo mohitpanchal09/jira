@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
+import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-export const authOptions = {
+export const authOptions:AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -49,7 +50,7 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
-    maxAge:30*60*60 //24 hours
+    maxAge:30*60*60 
   },
   pages: {
     signIn: "/sign-in",
