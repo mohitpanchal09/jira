@@ -30,11 +30,16 @@ import { resetWorkspaceInviteLink } from "@/services/workspaceService";
 interface EditWorkspaceFormProps {
   hideCancel?: boolean;
   initialValues: Workspace;
+  hasPermission:{
+    permission:boolean,
+    message:string
+  };
 }
 
 export const EditWorkspaceForm = ({
   hideCancel,
   initialValues,
+  hasPermission
 }: EditWorkspaceFormProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
@@ -60,6 +65,10 @@ export const EditWorkspaceForm = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = async (values: z.infer<typeof updateWorkspaceSchema>) => {
+    if (!hasPermission.permission){
+      toast.error("You do not have permission")
+      return;
+    } 
     try {
       const formData = new FormData();
       if (values.name) {
@@ -97,6 +106,10 @@ export const EditWorkspaceForm = ({
   };
 
   const handleDelete = async () => {
+     if (!hasPermission.permission){
+      toast.error("You do not have permission")
+      return;
+    } 
     const ok = await confirm();
     if (ok) {
       setIsDeleting(true);
@@ -115,6 +128,11 @@ export const EditWorkspaceForm = ({
     }
   };
   const handleResetInviteLink = async () => {
+
+     if (!hasPermission.permission){
+      toast.error("You do not have permission")
+      return;
+    } 
     
     const ok = await confirmReset();
     if (ok) {
@@ -151,7 +169,9 @@ export const EditWorkspaceForm = ({
       <ResetDialog />
 
       <Card className="w-full h-full border-none">
+        {!hasPermission.permission && <p className="text-center text-muted-foreground mt-4">You do not have permission to operate this workspace</p>}
         <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
+          
           <Button
             size={"sm"}
             variant={"secondary"}
@@ -178,7 +198,7 @@ export const EditWorkspaceForm = ({
                     <FormItem>
                       <FormLabel>Workspace name</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Enter workspace name" />
+                        <Input {...field} placeholder="Enter workspace name" disabled={!hasPermission.permission}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -202,6 +222,7 @@ export const EditWorkspaceForm = ({
                               className="object-cover"
                               width={100}
                               height={100}
+                              
                             />
                           </div>
                         ) : (
@@ -229,6 +250,7 @@ export const EditWorkspaceForm = ({
                             size={"xs"}
                             className="w-fit mt-2"
                             onClick={() => inputRef.current?.click()}
+                            disabled={!hasPermission.permission}
                           >
                             Upload Image
                           </Button>
@@ -251,7 +273,7 @@ export const EditWorkspaceForm = ({
                 <Button
                   type="submit"
                   size={"lg"}
-                  disabled={form.formState.isSubmitting}
+                  disabled={form.formState.isSubmitting || !hasPermission.permission}
                 >
                   {form.formState.isSubmitting ? "Saving..." : "Save changes"}
                 </Button>
@@ -288,7 +310,7 @@ export const EditWorkspaceForm = ({
               size={"sm"}
               onClick={handleResetInviteLink}
               variant={"delete"}
-              disabled={isResetting}
+              disabled={isResetting || !hasPermission.permission}
             >
               {isResetting ? (
                 <>
@@ -317,7 +339,7 @@ export const EditWorkspaceForm = ({
               size={"sm"}
               onClick={handleDelete}
               variant={"delete"}
-              disabled={isDeleting}
+              disabled={isDeleting || !hasPermission.permission}
             >
               {isDeleting ? (
                 <>

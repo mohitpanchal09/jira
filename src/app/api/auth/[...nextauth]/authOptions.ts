@@ -22,6 +22,7 @@ export const authOptions:AuthOptions = {
               email: credentials.email,
             },
           });
+          console.log("🚀 ~ authorize ~ user:", user)
 
           if (!user) {
             throw new Error("No user found with that email");

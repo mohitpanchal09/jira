@@ -1,5 +1,6 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions'
 import { EditProjectForm } from '@/components/EditProjectForm'
+import { isUserWorkspaceAdminOrCreatorOrProjectCreator } from '@/middleware/role'
 import { getProjectById } from '@/services/projectService'
 import { AuthOptions, getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
@@ -8,11 +9,12 @@ import React from 'react'
 type Props = {
   params:{
     projectId:string
+    workspaceId:string
   }
 }
 
 export default async function page({params}: Props) {
-  const session = getServerSession(authOptions as AuthOptions)
+  const session = await getServerSession(authOptions as AuthOptions)
   if(!session) redirect('/login')
     const initialValues = await getProjectById(Number(params.projectId))
   if(!initialValues){
@@ -20,9 +22,10 @@ export default async function page({params}: Props) {
       Data not found
     </div>
   }
+  const permission = await isUserWorkspaceAdminOrCreatorOrProjectCreator(Number(params.workspaceId),session?.user.id,Number(params.projectId))
   return (
     <div className='w-full lg:max-w-xl'>
-      <EditProjectForm initialValues={initialValues}/>
+      <EditProjectForm initialValues={initialValues} permission={permission}/>
     </div>
   )
 }

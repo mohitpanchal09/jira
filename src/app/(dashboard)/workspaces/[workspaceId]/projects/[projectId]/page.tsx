@@ -8,6 +8,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 async function page() {
   const session = await getServerSession(authOptions as AuthOptions);
   if (!session) redirect("/sign-in");
+  
 
   return (
     <>

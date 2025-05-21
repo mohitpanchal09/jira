@@ -1,5 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import MemberList from "@/components/MemberList";
+import { isUserWorkspaceAdminOrCreator } from "@/middleware/role";
 import { getMembers } from "@/services/memberService";
 import { AuthOptions, getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -17,8 +18,9 @@ async function page({params}: Props) {
   const workspaceId = Number(params.workspaceId)
   const members = await getMembers(workspaceId)
   if(members.length==0) return <div className="flex items-center justify-center">No members found</div>
+  const hasPermission = await isUserWorkspaceAdminOrCreator(workspaceId,session.user.id)
   return <div className="w-full lg:max-w-xl">
-    <MemberList workspaceId={params.workspaceId} members={members}/>
+    <MemberList workspaceId={params.workspaceId} members={members} hasPermission={hasPermission}/>
   </div>;
 }
 

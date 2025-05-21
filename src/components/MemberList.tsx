@@ -21,6 +21,10 @@ import { toast } from "sonner";
 type Props = {
   workspaceId: string;
   members: any;
+  hasPermission: {
+    permission: boolean;
+    message: string;
+  };
 };
 type MemberUser = {
   id: number;
@@ -38,7 +42,7 @@ type Member = {
   user: MemberUser;
 };
 
-function MemberList({ workspaceId, members }: Props) {
+function MemberList({ workspaceId, members, hasPermission }: Props) {
   const [loading, setLoading] = useState(false);
   const [loadingMemberId, setLoadingMemberId] = useState<number | null>(null); // Track the member being processed
   const [ConfirmDialog, confirm] = useConfirm(
@@ -55,6 +59,10 @@ function MemberList({ workspaceId, members }: Props) {
   const router = useRouter();
 
   const handleChangeRole = async (member: Member, role: UserRole) => {
+    if (!hasPermission.permission) {
+      toast.error("You do not have permission");
+      return;
+    }
     const ok = await confirmChangeRole();
     if (ok) {
       try {
@@ -63,7 +71,7 @@ function MemberList({ workspaceId, members }: Props) {
         const res = await axiosInstance.patch(`/member/${member.id}`, { role });
         toast.success("Workspace updated successfully!");
         router.refresh?.();
-      } catch (err:any) {
+      } catch (err: any) {
         toast.error(
           err?.response?.data?.message || "Failed to update workspace."
         );
@@ -75,6 +83,10 @@ function MemberList({ workspaceId, members }: Props) {
   };
 
   const handleRemove = async (member: Member) => {
+    if (!hasPermission.permission) {
+      toast.error("You do not have permission");
+      return;
+    }
     const ok = await confirm();
     if (ok) {
       try {
@@ -83,7 +95,7 @@ function MemberList({ workspaceId, members }: Props) {
         const res = await axiosInstance.delete(`/member/${member.id}`);
         toast.success("Workspace updated successfully!");
         router.refresh?.();
-      } catch (err:any) {
+      } catch (err: any) {
         toast.error(
           err?.response?.data?.message || "Failed to update workspace."
         );
@@ -99,6 +111,7 @@ function MemberList({ workspaceId, members }: Props) {
       <ConfirmDialog />
       <ChangeRoleDialog />
       <Card className="w-full h-full border-none shadow-none">
+         {!hasPermission.permission && <p className="text-center text-muted-foreground pt-4">You do not have permission to operate this workspace</p>}
         <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
           <Button
             variant={"secondary"}
@@ -148,7 +161,10 @@ function MemberList({ workspaceId, members }: Props) {
                       <DropdownMenuContent side="bottom" align="end">
                         <DropdownMenuItem
                           className="font-medium cursor-pointer"
-                          onClick={() => handleChangeRole(member, UserRole.ADMIN)}
+                          onClick={() =>
+                            handleChangeRole(member, UserRole.ADMIN)
+                          }
+                          disabled={!hasPermission.permission}
                         >
                           Set as administrator
                         </DropdownMenuItem>
@@ -157,12 +173,16 @@ function MemberList({ workspaceId, members }: Props) {
                           onClick={() =>
                             handleChangeRole(member, UserRole.MEMBER)
                           }
+                          disabled={!hasPermission.permission}
+
                         >
                           Set as member
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="font-medium cursor-pointer text-red-500"
                           onClick={() => handleRemove(member)}
+                          disabled={!hasPermission.permission}
+
                         >
                           Remove {member.user.name}
                         </DropdownMenuItem>

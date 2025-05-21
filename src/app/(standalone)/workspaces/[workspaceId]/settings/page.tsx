@@ -1,6 +1,8 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { EditWorkspaceForm } from "@/components/EditWorkspaceForm";
+import { isUserWorkspaceAdminOrCreator } from "@/middleware/role";
 import { getWorkspaceById } from "@/services/workspaceService";
-import { getServerSession } from "next-auth";
+import { AuthOptions, getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -11,14 +13,15 @@ type Props = {
 
 async function page({ params }: Props) {
   const workspaceId = Number(params.workspaceId);
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions as AuthOptions);
   if (!session) redirect("/sign-in");
+
   const workspace = await getWorkspaceById(workspaceId);
   if(!workspace) return <div className="flex items-center justify-center">Workspace not found</div>
-
+  const hasPermission = await isUserWorkspaceAdminOrCreator(workspaceId,session.user.id)
   return (
     <div className="w-full lg:max-w-xl">
-      <EditWorkspaceForm initialValues={workspace} hideCancel={true}/>
+      <EditWorkspaceForm initialValues={workspace} hideCancel={true} hasPermission={hasPermission}/>
     </div>
   );
 }

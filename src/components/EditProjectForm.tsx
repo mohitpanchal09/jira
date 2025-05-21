@@ -29,11 +29,16 @@ import { useConfirm } from "@/hooks/useConfirm";
 interface EditProjectFormProps {
   hideCancel?: ()=>void;
   initialValues: Project;
+  permission:{
+    message:string;
+    permission:boolean
+  }
 }
 
 export const EditProjectForm = ({
   hideCancel,          
   initialValues,
+  permission
 }: EditProjectFormProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [ConfirmDialog, confirm] = useConfirm(
@@ -53,6 +58,10 @@ export const EditProjectForm = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = async (values: z.infer<typeof updateProjectSchema>) => {
+     if (!permission.permission){
+          toast.error("You do not have permission")
+          return;
+        } 
     try {
       const formData = new FormData();
       if (values.name) {
@@ -84,6 +93,10 @@ export const EditProjectForm = ({
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+     if (!permission.permission){
+          toast.error("You do not have permission")
+          return;
+        } 
     const file = e.target.files?.[0];
     if (file) {
       form.setValue("image", file);
@@ -91,6 +104,10 @@ export const EditProjectForm = ({
   };
 
   const handleDelete = async () => {
+     if (!permission.permission){
+          toast.error("You do not have permission")
+          return;
+        } 
     const ok = await confirm();
     if (ok) {
       setIsDeleting(true);
@@ -116,6 +133,8 @@ export const EditProjectForm = ({
       <ConfirmDialog />
 
       <Card className="w-full h-full border-none">
+                {!permission.permission && <p className="text-center text-muted-foreground mt-4">You do not have permission to operate this project</p>}
+
         <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
           <Button
             size={"sm"}
@@ -143,7 +162,7 @@ export const EditProjectForm = ({
                     <FormItem>
                       <FormLabel>Project name</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Enter project name" />
+                        <Input {...field} placeholder="Enter project name" disabled={!permission.permission}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -194,6 +213,7 @@ export const EditProjectForm = ({
                             size={"xs"}
                             className="w-fit mt-2"
                             onClick={() => inputRef.current?.click()}
+                            disabled={!permission.permission}
                           >
                             Upload Image
                           </Button>
@@ -216,7 +236,7 @@ export const EditProjectForm = ({
                 <Button
                   type="submit"
                   size={"lg"}
-                  disabled={form.formState.isSubmitting}
+                  disabled={form.formState.isSubmitting || !permission.permission}
                 >
                   {form.formState.isSubmitting ? "Saving..." : "Save changes"}
                 </Button>
@@ -242,7 +262,7 @@ export const EditProjectForm = ({
               size={"sm"}
               onClick={handleDelete}
               variant={"delete"}
-              disabled={isDeleting}
+              disabled={isDeleting || !permission.permission}
             >
               {isDeleting ? (
                 <>
