@@ -13,7 +13,14 @@ import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function Client() {
+type Props={
+  permission:{
+    permission:boolean,
+    message:string
+  }
+}
+
+function Client({permission}:Props) {
   const params = useParamsHook();
 
   const {
@@ -56,7 +63,7 @@ function Client() {
         </div>
       </div>
       <Analytics data={analyticsData} />
-      <TaskViewSwitcher hideProjectFilter />
+      <TaskViewSwitcher hideProjectFilter permission={permission}/>
     </div>
   );
 }

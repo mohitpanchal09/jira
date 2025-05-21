@@ -26,6 +26,10 @@ type TaskFilter = {
 interface TaskViewSwitcherProps {
   hideProjectFilter?: boolean;
   hideAssigneeFilter?: boolean;
+  permission?:{
+    permission:boolean,
+    message:string
+  }
 }
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -33,6 +37,7 @@ const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 function TaskViewSwitcher({
   hideProjectFilter,
   hideAssigneeFilter,
+  permission
 }: TaskViewSwitcherProps) {
   const [filters, setFilters] = useState<TaskFilter>({});
   const { data: session } = useSession();
@@ -100,6 +105,7 @@ function TaskViewSwitcher({
             size={"sm"}
             className="w-full lg:w-auto"
             onClick={openTasktModal}
+            disabled={!permission?.permission}
           >
             <PlusIcon className="size-4 mr-2" />
             New Task
@@ -122,7 +128,7 @@ function TaskViewSwitcher({
         ) : (
           <>
             <TabsContent value="table" className="mt-0">
-              <DataTable data={tasks} title="Tasks" />
+              <DataTable data={tasks} title="Tasks" permission={permission}/>
             </TabsContent>
             <TabsContent value="kanban" className="mt-0">
               <DataKanban data={tasks} onChange={onKanbanChange} />

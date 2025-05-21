@@ -27,11 +27,15 @@ import { getStatusLabel } from "./TaskStatus";
 type Props = {
   data: any[];
   title: string;
+  permission?:{
+    permission:boolean,
+    message:string
+  }
 };
 
 const ITEMS_PER_PAGE = 5;
 
-function DataTable({ data, title }: Props) {
+function DataTable({ data, title,permission }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
 
@@ -101,6 +105,7 @@ function DataTable({ data, title }: Props) {
                   id={task.id}
                   projectId={task.projectId}
                   task={task}
+                  permission={permission}
                 >
                   <Button variant={"ghost"} className="size-8 p-0">
                     <MoreVertical className="size-4" />

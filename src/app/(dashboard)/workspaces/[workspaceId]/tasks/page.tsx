@@ -3,9 +3,13 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-type Props = {}
+type Props = {
+  params:{
+    workspaceId:string
+  }
+}
 
-async function page({}: Props) {
+async function page({params}: Props) {
     const session = getServerSession()
     if(!session) redirect('/sign-in')
   return (

@@ -20,10 +20,14 @@ type Props = {
   id: string | number;
   projectId: string | number;
   children: React.ReactNode;
-  task:any
+  task:any;
+   permission?:{
+    permission:boolean,
+    message:string
+  }
 };
 
-function TaskActions({ id, projectId,task ,children }: Props) {
+function TaskActions({ id, projectId,task ,children,permission }: Props) {
   const { openEditTasktModal } = useModalStore();
   const workspaceId = useParamsHook().workspaceId;
   const [isDeleting, setIsDeleting] = useState(false);
@@ -89,7 +93,7 @@ function TaskActions({ id, projectId,task ,children }: Props) {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleDelete}
-              disabled={isDeleting}
+              disabled={isDeleting || !permission?.permission}
               className="font-medium p-[10px]"
             >
               <Trash className="text-red-500 focus:text-red-500 size-4 mr-2 stroke-2" />
