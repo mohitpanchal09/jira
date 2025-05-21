@@ -10,8 +10,9 @@ type Props = {
 }
 
 async function page({params}: Props) {
-    const session = getServerSession()
+    const session = await getServerSession()
     if(!session) redirect('/sign-in')
+      // const permission = await 
   return (
     <div className='h-full flex flex-col'>
         <TaskViewSwitcher hideAssigneeFilter/>

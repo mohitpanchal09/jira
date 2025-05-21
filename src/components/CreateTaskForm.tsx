@@ -32,6 +32,7 @@ import {
 import MemberAvatar from "./MemberAvatar";
 import { Status } from "@/types";
 import ProjectAvatar from "./ProjectAvatar";
+import { Label } from "./ui/label";
 
 interface CreateTaskFormProps {
   hideCancel?: boolean;
@@ -145,7 +146,7 @@ export const CreateTaskForm = ({
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select assignee" />
+                          <Label className="mr-auto text-muted-foreground">{(memberOptions.find((item)=>item.id==field.value))?.name || "Select Assignee"}</Label>
                         </SelectTrigger>
                         <SelectContent>
                           {memberOptions.map((member) => (
