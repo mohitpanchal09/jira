@@ -25,22 +25,27 @@ export async function createWorkspace(name: string, userId: number, image: strin
 }
 
 export async function getWorkspaces(userId: number) {
-
-    return await prisma.workspace.findMany({
+  return await prisma.workspace.findMany({
+    where: {
+      member: {
+        some: {
+          userId: userId,
+        },
+      },
+    },
+    include: {
+      member: {
         where: {
-            OR: [
-                { userId: userId },
-                {
-                    member: {
-                        some: {
-                            userId
-                        }
-                    }
-                }
-            ]
-        }
-    })
+          userId: userId,
+        },
+        select: {
+          role: true,
+        },
+      },
+    },
+  });
 }
+
 
 export async function updateWorkspace(name: string, userId: number, workspaceId: number, image?: string) {
     const updatedWorkspace = await prisma.workspace.update({
@@ -90,11 +95,12 @@ export async function resetWorkspaceInviteLink(workspaceId:number) {
     return workspace;
 }
 
-export async function joinWorkspace(workspaceId:number,userId:number) {
+export async function joinWorkspace(workspaceId:number,userId:number,role?:UserRole) {
     const member = await prisma.member.create({
         data:{
             userId,
-            workspaceId
+            workspaceId,
+            role
         }
     })
 

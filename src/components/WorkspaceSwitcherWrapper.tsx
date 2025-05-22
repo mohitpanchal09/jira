@@ -6,7 +6,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function WorkspaceSwitcherWrapper() {
   const { data: workspaces, error, isLoading } = useSWR('/api/workspace', fetcher);
-  console.log("🚀 ~ WorkspaceSwitcherWrapper ~ workspaces:", workspaces)
 
   if (error) return <div>Failed to load workspaces</div>;
   if (isLoading) return <div></div>;

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { AuthOptions, getServerSession } from "next-auth";
 import { prisma } from "@/lib/db";
 import { authOptions } from "../../auth/[...nextauth]/authOptions";
+import { UserRole } from "@/types";
 
 export async function GET(
   req: NextRequest,
@@ -89,7 +90,7 @@ export async function DELETE(
       },
     });
 
-    if (!isMember) {
+    if (!isMember || isMember.role!==UserRole.ADMIN) {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 

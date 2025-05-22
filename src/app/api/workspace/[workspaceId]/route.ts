@@ -4,32 +4,41 @@ import { AuthOptions, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { authOptions } from "../../auth/[...nextauth]/authOptions";
+import { UserRole } from "@/types";
 
-export async function PATCH(req: NextRequest,  { params }: { params: { workspaceId: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: { workspaceId: string } }) {
     try {
         const session = await getServerSession(authOptions as AuthOptions)
-        
+
         const workspaceId = Number(params.workspaceId)
-       
+
         if (!session?.user?.id) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
 
         const existingWorkspace = await prisma.workspace.findUnique({
-            where:{
-                id:workspaceId
+            where: {
+                id: workspaceId
             }
         })
-        if(!existingWorkspace){
+        if (!existingWorkspace) {
             return NextResponse.json({ message: "workspace not found" }, { status: 404 });
         }
 
         const userId = session?.user?.id
-        if(existingWorkspace.userId!==userId){
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        const workspaceMember = await prisma.member.findFirst({
+            where: {
+                workspaceId: workspaceId,
+                userId: userId,
+            }
+        });
+
+        if (!workspaceMember || workspaceMember.role !== UserRole.ADMIN) {
+            return NextResponse.json({ message: "Forbidden: Only workspace admin can update" }, { status: 403 });
         }
+
         const formData = await req.formData()
-        
+
         const name = formData.get("name")
         const image = formData.get("image")
         if (typeof name !== "string") {
@@ -44,7 +53,7 @@ export async function PATCH(req: NextRequest,  { params }: { params: { workspace
             imageUrl = await uploadToS3(buffer, fileName, image.type); // define this
         }
 
-        const workspace = await updateWorkspace(name, userId,workspaceId,imageUrl,)
+        const workspace = await updateWorkspace(name, userId, workspaceId, imageUrl,)
         return NextResponse.json({ message: "workspace updated successfully", workspace }, { status: 201 })
     } catch (err) {
         console.error("Registration error:", err);
@@ -57,30 +66,37 @@ export async function PATCH(req: NextRequest,  { params }: { params: { workspace
 }
 
 
-export async function DELETE(req: NextRequest,  { params }: { params: { workspaceId: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { workspaceId: string } }) {
     try {
         const session = await getServerSession(authOptions as AuthOptions)
-        
+
         const workspaceId = Number(params.workspaceId)
-       
+
         if (!session?.user?.id) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
 
         const existingWorkspace = await prisma.workspace.findUnique({
-            where:{
-                id:workspaceId
+            where: {
+                id: workspaceId
             }
         })
-        if(!existingWorkspace){
+        if (!existingWorkspace) {
             return NextResponse.json({ message: "workspace not found" }, { status: 404 });
         }
 
         const userId = session?.user?.id
-        
 
-        if(existingWorkspace.userId!==userId){
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+        const workspaceMember = await prisma.member.findFirst({
+            where: {
+                workspaceId: workspaceId,
+                userId: userId,
+            }
+        });
+
+        if (!workspaceMember || workspaceMember.role !== UserRole.ADMIN) {
+            return NextResponse.json({ message: "Forbidden: Only workspace admin can delete" }, { status: 403 });
         }
 
         const workspace = await deleteWorkspace(workspaceId)
@@ -96,30 +112,37 @@ export async function DELETE(req: NextRequest,  { params }: { params: { workspac
 }
 
 
-export async function POST(req: NextRequest,  { params }: { params: { workspaceId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: { workspaceId: string } }) {
     try {
         const session = await getServerSession(authOptions as AuthOptions)
-        
+
         const workspaceId = Number(params.workspaceId)
-       
+
         if (!session?.user?.id) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
 
         const existingWorkspace = await prisma.workspace.findUnique({
-            where:{
-                id:workspaceId
+            where: {
+                id: workspaceId
             }
         })
-        if(!existingWorkspace){
+        if (!existingWorkspace) {
             return NextResponse.json({ message: "workspace not found" }, { status: 404 });
         }
 
         const userId = session?.user?.id
-        
 
-        if(existingWorkspace.userId!==userId){
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+        const workspaceMember = await prisma.member.findFirst({
+            where: {
+                workspaceId: workspaceId,
+                userId: userId,
+            }
+        });
+
+        if (!workspaceMember || workspaceMember.role !== UserRole.ADMIN) {
+            return NextResponse.json({ message: "Forbidden: Only workspace admin can reset code" }, { status: 403 });
         }
 
         const workspace = await resetWorkspaceInviteLink(workspaceId)

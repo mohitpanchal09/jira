@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { uploadToS3 } from "@/lib/s3";
 import { deleteProject, updateProject } from "@/services/projectService";
 import { authOptions } from "../../auth/[...nextauth]/authOptions";
+import { UserRole } from "@/types";
 
 export async function GET(req: NextRequest, { params }: { params: { projectId: string } }) {
     try {
@@ -28,7 +29,7 @@ export async function GET(req: NextRequest, { params }: { params: { projectId: s
             return NextResponse.json({ message: "Project not found" }, { status: 404 });
         }
 
-        
+
         return NextResponse.json({ project }, { status: 200 });
     } catch (err) {
         console.error("Fetch project error:", err);
@@ -52,17 +53,26 @@ export async function PATCH(req: NextRequest, { params }: { params: { projectId:
         }
 
         const existingProject = await prisma.project.findUnique({
-            where: {
-                id: projectId
-            }
-        })
+            where: { id: projectId },
+            include: { workspace: true }, // Include workspace info to check admin
+        });
+
         if (!existingProject) {
             return NextResponse.json({ message: "project not found" }, { status: 404 });
         }
 
         const userId = session?.user?.id
-        if (existingProject.userId !== userId) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        const member = await prisma.member.findFirst({
+            where:{
+                userId:userId,
+                workspaceId:existingProject.workspaceId
+            }
+        })
+        if (!member || member.role!==UserRole.ADMIN) {
+            return NextResponse.json(
+                { message: "You must be the workspace admin to update the project" },
+                { status: 403 }
+            );
         }
         const formData = await req.formData()
 
@@ -108,6 +118,9 @@ export async function DELETE(req: NextRequest, { params }: { params: { projectId
         const existingProject = await prisma.project.findUnique({
             where: {
                 id: projectId
+            },
+            include: {
+                workspace: true
             }
         })
         if (!existingProject) {
@@ -117,12 +130,21 @@ export async function DELETE(req: NextRequest, { params }: { params: { projectId
         const userId = session?.user?.id
 
 
-        if (existingProject.userId !== userId) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        const member = await prisma.member.findFirst({
+            where:{
+                userId:userId,
+                workspaceId:existingProject.workspaceId
+            }
+        })
+        if (!member || member.role!==UserRole.ADMIN) {
+            return NextResponse.json(
+                { message: "You must be the workspace admin to delete the project" },
+                { status: 403 }
+            );
         }
 
         const workspace = await deleteProject(projectId)
-        return NextResponse.json({ message: "project updated successfully", workspace }, { status: 201 })
+        return NextResponse.json({ message: "project deleted successfully", workspace }, { status: 201 })
     } catch (err) {
         console.error("Registration error:", err);
         return NextResponse.json(
