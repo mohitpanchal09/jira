@@ -13,9 +13,10 @@ import { useRouter } from "next/navigation";
 type Props = {
   project: Project;
   task: Task;
+  userRoles:string[]
 };
 
-function TaskBreadCrumps({ project, task }: Props) {
+function TaskBreadCrumps({ project, task,userRoles }: Props) {
   const workspaceId = useParamsHook().workspaceId;
   const [isDeleting, setIsDeleting] = useState(false);
   const [ConfirmDialog, confirm] = useConfirm(
@@ -57,7 +58,7 @@ function TaskBreadCrumps({ project, task }: Props) {
         {task.name}
       </p>
 
-      <Button
+     {userRoles.includes("ADMIN")&& <Button
         variant={"delete"}
         size={"sm"}
         className="ml-auto"
@@ -66,7 +67,7 @@ function TaskBreadCrumps({ project, task }: Props) {
       >
         <Trash className="size-4 lg:mr-2" />
         <span className="hidden lg:block">Delete Task</span>
-      </Button>
+      </Button>}
     </div>
   );
 }

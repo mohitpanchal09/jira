@@ -21,6 +21,7 @@ type Props={
 }
 
 function Client({permission}:Props) {
+  console.log("🚀 ~ Client ~ permission:", permission)
   const params = useParamsHook();
 
   const {
@@ -52,14 +53,14 @@ function Client({permission}:Props) {
           <p className="text-lg font-semibold">{projectData.project.name}</p>
         </div>
         <div>
-          <Button variant="secondary" size="sm" asChild>
+         {permission.permission && <Button variant="secondary" size="sm" asChild>
             <Link
               href={`/workspaces/${params.workspaceId}/projects/${params.projectId}/settings`}
             >
               <PencilIcon className="mr-1 w-4 h-4" />
               Edit Project
             </Link>
-          </Button>
+          </Button>}
         </div>
       </div>
       <Analytics data={analyticsData} />

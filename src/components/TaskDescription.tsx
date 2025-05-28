@@ -10,9 +10,10 @@ import { mutate } from "swr";
 
 type Props = {
   task: Task;
+  userRoles:string[]
 };
 
-function TaskDescription({ task }: Props) {
+function TaskDescription({ task ,userRoles}: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(task.description);
   const [pending, setPending] = useState(false);
@@ -46,14 +47,14 @@ function TaskDescription({ task }: Props) {
     <div className="p-4 border rounded-lg">
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold">Description</p>
-        <Button
+       {userRoles.includes('ADMIN') &&  <Button
           size="sm"
           variant="secondary"
           onClick={() => (isEditing ? handleCancel() : setIsEditing(true))}
         >
           {isEditing ? <XIcon /> : <PencilIcon className="size-4 mr-2" />}
           {isEditing ? "Cancel" : "Edit"}
-        </Button>
+        </Button>}
       </div>
 
       <Separator className="my-4" />

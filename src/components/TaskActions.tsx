@@ -20,14 +20,11 @@ type Props = {
   id: string | number;
   projectId: string | number;
   children: React.ReactNode;
-  task:any;
-   permission?:{
-    permission:boolean,
-    message:string
-  }
+  task: any;
+  roles?: string[];
 };
 
-function TaskActions({ id, projectId,task ,children,permission }: Props) {
+function TaskActions({ id, projectId, task, children, roles }: Props) {
   const { openEditTasktModal } = useModalStore();
   const workspaceId = useParamsHook().workspaceId;
   const [isDeleting, setIsDeleting] = useState(false);
@@ -75,7 +72,7 @@ function TaskActions({ id, projectId,task ,children,permission }: Props) {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => openEditTasktModal(task)}
-              disabled={false}
+              disabled={!roles?.includes("ADMIN")}
               className="font-medium p-[10px]"
             >
               <PencilIcon className="size-4 mr-2 stroke-2" />
@@ -91,14 +88,16 @@ function TaskActions({ id, projectId,task ,children,permission }: Props) {
               <ExternalLinkIcon className="size-4 mr-2 stroke-2" />
               Open Project
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleDelete}
-              disabled={isDeleting || !permission?.permission}
-              className="font-medium p-[10px]"
-            >
-              <Trash className="text-red-500 focus:text-red-500 size-4 mr-2 stroke-2" />
-              Delete Task
-            </DropdownMenuItem>
+            {roles?.includes("ADMIN") && (
+              <DropdownMenuItem
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="font-medium p-[10px]"
+              >
+                <Trash className="text-red-500 focus:text-red-500 size-4 mr-2 stroke-2" />
+                Delete Task
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

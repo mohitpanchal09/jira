@@ -19,10 +19,10 @@ export const TaskIdClinet = ({}: Props) => {
 
   return (
     <div className="flex flex-col">
-     <TaskBreadCrumps project={data.task.project} task={data.task}/>
+     <TaskBreadCrumps project={data.task.project} task={data.task} userRoles={data.userRoles}/>
      <Separator className="my-6"/>
      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <TaskOverview task={data.task}/>
+        <TaskOverview task={data.task} userRoles={data.userRoles}/>
      </div>
     </div>
   );

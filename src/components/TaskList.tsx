@@ -14,9 +14,13 @@ import ProjectAvatar from "./ProjectAvatar";
 interface TaskListProps {
   tasks: Task[];
   total: number;
+  permission:{
+    permission:boolean;
+    message:string
+  }
 }
 
-export const TaskList = ({ tasks, total }: TaskListProps) => {
+export const TaskList = ({ tasks, total,permission }: TaskListProps) => {
   const workspaceId=useParamsHook().workspaceId
   const { openTasktModal } = useModalStore();
   return (
@@ -24,9 +28,9 @@ export const TaskList = ({ tasks, total }: TaskListProps) => {
       <div className="bg-muted rounded-lg p-3">
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Tasks ({total})</p>
-          <Button variant={"muted"} size="icon" onClick={openTasktModal}>
+         {permission?.permission && <Button variant={"muted"} size="icon" onClick={openTasktModal}>
             <PlusIcon className="size-4 text-neutral-400" />
-          </Button>
+          </Button>}
         </div>
         <Separator className="my-4" />
         <ul className="flex flex-col gap-y-4">

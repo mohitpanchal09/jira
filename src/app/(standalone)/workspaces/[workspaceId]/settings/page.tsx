@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { EditWorkspaceForm } from "@/components/EditWorkspaceForm";
-import { isUserWorkspaceAdminOrCreator } from "@/middleware/role";
+import { isUserWorkspaceAdmin } from "@/middleware/role";
 import { getWorkspaceById } from "@/services/workspaceService";
 import { AuthOptions, getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -18,7 +18,7 @@ async function page({ params }: Props) {
 
   const workspace = await getWorkspaceById(workspaceId);
   if(!workspace) return <div className="flex items-center justify-center">Workspace not found</div>
-  const hasPermission = await isUserWorkspaceAdminOrCreator(workspaceId,session.user.id)
+  const hasPermission = await isUserWorkspaceAdmin(workspaceId,session.user.id)
   return (
     <div className="w-full lg:max-w-xl">
       <EditWorkspaceForm initialValues={workspace} hideCancel={true} hasPermission={hasPermission}/>

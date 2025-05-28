@@ -27,12 +27,13 @@ function Projects() {
   );
 
   const projects: Project[] = data?.projects || [];
+  const userRoles:string[] = data?.userRoles || []
 
   return (
     <div className="flex flex-col gap-y-2">
       <div className="flex items-center justify-between">
         <p className="font-semibold">Projects</p>
-        <RiAddCircleFill className="size-5 cursor-pointer" onClick={openCreateProjectModal} />
+       {userRoles.includes("ADMIN") && <RiAddCircleFill className="size-5 cursor-pointer" onClick={openCreateProjectModal} />}
       </div>
 
       {isLoading && <p className="text-sm text-muted-foreground">Loading...</p>}

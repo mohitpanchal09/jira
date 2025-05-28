@@ -105,7 +105,7 @@ function DataTable({ data, title,permission }: Props) {
                   id={task.id}
                   projectId={task.projectId}
                   task={task}
-                  permission={permission}
+                  roles={task.userRoles}
                 >
                   <Button variant={"ghost"} className="size-8 p-0">
                     <MoreVertical className="size-4" />

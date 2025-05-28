@@ -13,9 +13,10 @@ import TaskDescription from "./TaskDescription";
 
 type Props = {
   task: Task;
+  userRoles:string[]
 };
 
-function TaskOverview({ task }: Props) {
+function TaskOverview({ task,userRoles }: Props) {
   const { openEditTasktModal } = useModalStore();
   return (
     <div className="flex flex-col gap-y-4 col-span-1">
@@ -23,14 +24,14 @@ function TaskOverview({ task }: Props) {
       <div className="bg-muted rounded-lg p-4">
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Overview</p>
-          <Button
+         {userRoles.includes('ADMIN') && <Button
             size={"sm"}
             variant={"secondary"}
             onClick={() => openEditTasktModal(task)}
           >
             <PencilIcon className="size-4 mr-2" />
             Edit
-          </Button>
+          </Button>}
         </div>
         <Separator className="my-4" />
         <div className="flex flex-col gap-y-4">
@@ -50,7 +51,7 @@ function TaskOverview({ task }: Props) {
         </div>
       </div>
       {/* <OverviewProperty label="Description"> */}
-        <TaskDescription task={task} />
+        <TaskDescription task={task} userRoles={userRoles} />
       {/* </OverviewProperty> */}
     </div>
   );

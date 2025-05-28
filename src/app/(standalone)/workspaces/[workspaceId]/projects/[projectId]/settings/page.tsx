@@ -1,6 +1,6 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions'
 import { EditProjectForm } from '@/components/EditProjectForm'
-import { isUserWorkspaceAdminOrCreatorOrProjectCreator } from '@/middleware/role'
+import { isUserWorkspaceAdmin } from '@/middleware/role'
 import { getProjectById } from '@/services/projectService'
 import { AuthOptions, getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
@@ -22,7 +22,7 @@ export default async function page({params}: Props) {
       Data not found
     </div>
   }
-  const permission = await isUserWorkspaceAdminOrCreatorOrProjectCreator(Number(params.workspaceId),session?.user.id,Number(params.projectId))
+  const permission = await isUserWorkspaceAdmin(Number(params.workspaceId),session?.user.id)
   return (
     <div className='w-full lg:max-w-xl'>
       <EditProjectForm initialValues={initialValues} permission={permission}/>

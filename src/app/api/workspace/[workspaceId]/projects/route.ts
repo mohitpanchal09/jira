@@ -26,10 +26,22 @@ export async function GET(req: NextRequest,  { params }: { params: { workspaceId
             return NextResponse.json({ message: "workspace not found" }, { status: 404 });
         }
 
+        const userId = Number(session.user.id);
+
+
+        const member = await prisma.member.findFirst({
+            where: {
+                userId,
+                workspaceId,
+            },
+        });
+        const userRoles:string[]=[]
+        if (member && member.role === "ADMIN") userRoles.push("ADMIN");
+
       
         const projects =  await getProjects(workspaceId)
         
-        return NextResponse.json({ message: "Projects fetched successfully", projects }, { status: 200 })
+        return NextResponse.json({ message: "Projects fetched successfully", projects,userRoles }, { status: 200 })
     } catch (err) {
         console.error("Registration error:", err);
         return NextResponse.json(

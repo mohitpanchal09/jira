@@ -182,7 +182,7 @@ export const CreateTaskForm = ({
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select assignee" />
+                        <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value={Status.BACKLOG}>Backlog</SelectItem>

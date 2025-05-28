@@ -61,8 +61,7 @@ function DataKanban({ data, onChange }: Props) {
       newTasks[status as Status].sort((a, b) => a.position - b.position);
     });
 
-    setTasks(newTasks)
-
+    setTasks(newTasks);
   }, [data]);
 
   const onDragEnd = useCallback(
@@ -137,7 +136,6 @@ function DataKanban({ data, onChange }: Props) {
     },
     [onChange]
   );
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex overflow-x-auto">
@@ -163,6 +161,7 @@ function DataKanban({ data, onChange }: Props) {
                         key={task.id}
                         index={index}
                         draggableId={String(task.id)}
+                        isDragDisabled={!task?.userRoles?.includes("ADMIN") && !task?.userRoles?.includes("ASSIGNEE")}
                       >
                         {(provided) => (
                           <div

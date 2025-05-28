@@ -18,9 +18,22 @@ export async function GET(req: NextRequest, { params }: { params: { workspaceId:
                 id: workspaceId,
             },
         });
+        const userId = Number(session.user.id);
+
 
         if (!existingWorkspace) {
             return NextResponse.json({ message: "Workspace not found" }, { status: 404 });
+        }
+
+        const member = await prisma.member.findFirst({
+            where: {
+                userId,
+                workspaceId,
+            },
+        });
+
+        if (!member) {
+            return NextResponse.json({ message: "Forbidden" }, { status: 403 });
         }
 
         // Extract query parameters
@@ -36,11 +49,21 @@ export async function GET(req: NextRequest, { params }: { params: { workspaceId:
             dueDate: dueDate ? new Date(dueDate) : undefined,
             projectId:projectId ? Number(projectId):undefined
         };
-            console.log("🚀 ~ GET ~ filters:", filters)
 
         const tasks = await getWorkspaceTasks(workspaceId, filters);
 
-        return NextResponse.json({ message: "Tasks fetched successfully", tasks }, { status: 200 });
+        const tasksWithRoles = tasks.map(task => {
+            const roles: string[] = [];
+            if (member.role === "ADMIN") roles.push("ADMIN");
+            if (task.assigneeId === userId) roles.push("ASSIGNEE");
+
+            return {
+                ...task,
+                userRoles: roles
+            };
+        });
+
+        return NextResponse.json({ message: "Tasks fetched successfully", tasks:tasksWithRoles }, { status: 200 });
     } catch (err) {
         console.error("Fetch error:", err);
         return NextResponse.json(

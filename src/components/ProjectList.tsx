@@ -13,9 +13,13 @@ import ProjectAvatar from "./ProjectAvatar";
 interface ProjectListProps {
   projects: Project[];
   total: number;
+  permission:{
+    permission:boolean;
+    message:string
+  }
 }
 
-export const ProjectList = ({ projects, total }: ProjectListProps) => {
+export const ProjectList = ({ projects, total,permission }: ProjectListProps) => {
   const workspaceId = useParamsHook().workspaceId;
   const { openCreateProjectModal } = useModalStore();
   return (
@@ -23,9 +27,9 @@ export const ProjectList = ({ projects, total }: ProjectListProps) => {
       <div className="bg-muted rounded-lg p-3">
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Projects ({total})</p>
-          <Button variant={"muted"} size="icon" onClick={openCreateProjectModal}>
+         {permission?.permission && <Button variant={"muted"} size="icon" onClick={openCreateProjectModal}>
             <PlusIcon className="size-4 text-neutral-400" />
-          </Button>
+          </Button>}
         </div>
         <Separator className="my-4" />
         <ul className="flex flex-col gap-y-4">

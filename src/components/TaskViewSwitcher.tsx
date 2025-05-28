@@ -101,7 +101,7 @@ function TaskViewSwitcher({
               Calendar
             </TabsTrigger>
           </TabsList>
-          <Button
+         {permission?.permission && <Button
             size={"sm"}
             className="w-full lg:w-auto"
             onClick={openTasktModal}
@@ -109,7 +109,7 @@ function TaskViewSwitcher({
           >
             <PlusIcon className="size-4 mr-2" />
             New Task
-          </Button>
+          </Button>}
         </div>
         <Separator className="my-4" />
         <DataFilters
@@ -128,7 +128,7 @@ function TaskViewSwitcher({
         ) : (
           <>
             <TabsContent value="table" className="mt-0">
-              <DataTable data={tasks} title="Tasks" permission={permission}/>
+              <DataTable data={tasks} title="Tasks"/>
             </TabsContent>
             <TabsContent value="kanban" className="mt-0">
               <DataKanban data={tasks} onChange={onKanbanChange} />

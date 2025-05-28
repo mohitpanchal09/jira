@@ -42,6 +42,7 @@ export type Task = {
     position:number,
     dueDate:Date
     status:Status
+    userRoles?:string[]
 }
 
 export { Status };

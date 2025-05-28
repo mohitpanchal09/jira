@@ -46,7 +46,15 @@ export async function GET(
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    return NextResponse.json({ task: existingTask }, { status: 200 });
+    const userRoles: string[] = [];
+
+    if (isMember.role === UserRole.ADMIN) userRoles.push("ADMIN");
+    if (existingTask.assigneeId === userId) userRoles.push("ASSIGNEE");
+
+    return NextResponse.json(
+      { task: existingTask, userRoles },
+      { status: 200 }
+    );
   } catch (err: any) {
     console.error("Task fetch error:", err);
     return NextResponse.json(

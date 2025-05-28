@@ -1,6 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { prisma } from "@/lib/db";
 import { getTasks } from "@/services/taskService";
+import { UserRole } from "@/types";
 import { AuthOptions, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -23,7 +24,9 @@ export async function GET(req: NextRequest, { params }: { params: { projectId: s
             return NextResponse.json({ message: "Project not found" }, { status: 404 });
         }
 
-        // Extract query parameters
+        const userId = Number(session.user.id);
+
+
         const searchParams = req.nextUrl.searchParams;
         const status = searchParams.get("status") || undefined;
         const assigneeId = searchParams.get("assigneeId") || undefined;
@@ -36,8 +39,26 @@ export async function GET(req: NextRequest, { params }: { params: { projectId: s
         };
 
         const tasks = await getTasks(projectId, filters);
+        const member = await prisma.member.findFirst({
+            where: {
+                userId,
+                workspaceId: existingProject.workspaceId,
+            },
+        });
+        const isAdmin = member?.role === UserRole.ADMIN;
+        const tasksWithUserRoles = tasks.map(task => {
+            const userRoles: string[] = [];
+            if (isAdmin) userRoles.push('ADMIN');
+            if (task.assigneeId === userId) userRoles.push('ASSIGNEE');
 
-        return NextResponse.json({ message: "Tasks fetched successfully", tasks }, { status: 200 });
+            return {
+                ...task,
+                userRoles,
+            };
+        });
+        console.log("🚀 ~ GET ~ tasksWithUserRoles:", tasksWithUserRoles)
+
+        return NextResponse.json({ message: "Tasks fetched successfully", tasks:tasksWithUserRoles }, { status: 200 });
     } catch (err) {
         console.error("Fetch error:", err);
         return NextResponse.json(
