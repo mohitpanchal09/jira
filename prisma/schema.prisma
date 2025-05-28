@@ -16,11 +16,12 @@ datasource db {
 
 model User {
   id                  Int         @id @default(autoincrement())
-  email               String      @unique
+  email               String?      
   username            String      @unique
   firstname           String?
   password            String?
   lastname            String?
+  provider            AuthProvider @default(CREDENTIALS)
   createdAt           DateTime    @default(now())
   workspace           Workspace[]
   memberships         Member[] 
@@ -91,4 +92,10 @@ enum Status {
   IN_REVIEW   @map("IN_REVIEW")
   DONE        @map("DONE")
   IN_PROGRESS @map("IN_PROGRESS")
+}
+
+enum AuthProvider {
+  CREDENTIALS
+  GOOGLE
+  GITHUB
 }

@@ -28,7 +28,7 @@ export default function SignInCard() {
     const form = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
-            email: "",
+            username: "",
             password: "",
         },
     });
@@ -36,7 +36,7 @@ export default function SignInCard() {
     const onSubmit = async (values: z.infer<typeof loginSchema>) => {
         const res = await signIn("credentials", {
             redirect: false,
-            email: values.email,
+            username: values.username,
             password: values.password,
         });
        
@@ -60,15 +60,15 @@ export default function SignInCard() {
                 <Form {...form}>
                     <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
                         <FormField
-                            name="email"
+                            name="username"
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
                                         <Input
                                             {...field}
-                                            type="email"
-                                            placeholder="Enter email address"
+                                            type="text"
+                                            placeholder="Enter username"
 
                                         />
                                     </FormControl>
@@ -110,6 +110,7 @@ export default function SignInCard() {
                     variant={"secondary"}
                     size={"lg"}
                     className="w-full"
+                    onClick={() => signIn("google")}
                 >
                     <FcGoogle className="mr-2 size-5" /> Login with Google
                 </Button>
@@ -118,6 +119,7 @@ export default function SignInCard() {
                     variant={"secondary"}
                     size={"lg"}
                     className="w-full"
+                    onClick={() => signIn("github")}
                 >
                     <FaGithub className="mr-2 size-5" /> Login with Github
                 </Button>

@@ -22,7 +22,7 @@ export type Project = {
 
 export type User = {
     id:number,
-    email:string,
+    email:string | null,
     username:string | null,
     firstname?:string | null,
     lastname?:string | null,

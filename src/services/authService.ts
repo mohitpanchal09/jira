@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/generated/prisma";
 import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
 
@@ -14,7 +15,7 @@ export async function registerUser({ email, password, username }: { email: strin
     const hashedPassword = await bcrypt.hash(password,10)
     return await prisma.user.create({
         data:{
-            username,email,password:hashedPassword
+            username,email,password:hashedPassword,provider:AuthProvider.CREDENTIALS
         }
     })
 }
