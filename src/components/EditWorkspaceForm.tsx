@@ -139,11 +139,9 @@ export const EditWorkspaceForm = ({
       setIsResetting(true);
       try {
         const res =await axiosInstance.post(`/workspace/${initialValues.id}`,initialValues.id);
-        console.log("🚀 ~ handleResetInviteLink ~ res:", res)
         toast.success("Invite link has been reset!");
         router.refresh()
       } catch (error: any) {
-        console.log("🚀 ~ handleResetInviteLink ~ error:", error)
         toast.error(
           error?.response?.data?.message || "Failed to reset invite link."
         );

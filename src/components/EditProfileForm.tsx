@@ -18,13 +18,14 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useRef } from "react";
-import { ImageIcon } from "lucide-react";
+import { ArrowLeftIcon, ImageIcon } from "lucide-react";
 import { axiosInstance } from "@/lib/axios";
 import { User } from "@/types";
 import { updateProfileSchema } from "@/validations/user.validations";
 import { useSession } from "next-auth/react";
 import { passwordChangeSchema } from "@/validations/passwordChange.validations";
 import { AuthProvider } from "@/generated/prisma";
+import { useRouter } from "next/navigation";
 
 type UpdateProfileSchema = z.infer<typeof updateProfileSchema>;
 type PasswordChangeSchema = z.infer<typeof passwordChangeSchema>;
@@ -36,6 +37,7 @@ interface EditProfileFormProps {
 export const EditProfileForm = ({ user }: EditProfileFormProps) => {
   const { update: updateSession } = useSession();
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const form = useForm<UpdateProfileSchema>({
     resolver: zodResolver(updateProfileSchema),
@@ -121,9 +123,19 @@ export const EditProfileForm = ({ user }: EditProfileFormProps) => {
     <div className="flex flex-col gap-y-4">
       {/* Profile Form */}
       <Card className="w-full shadow-none">
-        <CardHeader>
+        <CardHeader className="flex flex-row   items-center gap-x-4 p-7 space-y-0">
+          <Button
+            size={"sm"}
+            variant={"secondary"}
+           onClick={() => router.back()}
+          >
+            <ArrowLeftIcon className="size-4" />
+            Back
+          </Button>
           <CardTitle>Edit Profile</CardTitle>
+         
         </CardHeader>
+        
         <Separator />
         <CardContent className="p-7">
           <FormProvider {...form}>
