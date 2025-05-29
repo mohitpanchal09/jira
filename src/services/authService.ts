@@ -10,7 +10,7 @@ export async function registerUser({ email, password, username }: { email: strin
             username
         }
     })
-    if (existingUser) throw new Error("User already exists")
+    if (existingUser) throw new Error("Username is taken")
 
     const hashedPassword = await bcrypt.hash(password,10)
     return await prisma.user.create({
