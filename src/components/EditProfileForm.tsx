@@ -24,6 +24,7 @@ import { User } from "@/types";
 import { updateProfileSchema } from "@/validations/user.validations";
 import { useSession } from "next-auth/react";
 import { passwordChangeSchema } from "@/validations/passwordChange.validations";
+import { AuthProvider } from "@/generated/prisma";
 
 type UpdateProfileSchema = z.infer<typeof updateProfileSchema>;
 type PasswordChangeSchema = z.infer<typeof passwordChangeSchema>;
@@ -250,7 +251,7 @@ export const EditProfileForm = ({ user }: EditProfileFormProps) => {
       </Card>
 
       {/* Password Form */}
-      <Card className="w-full shadow-none">
+     {user.provider==AuthProvider.CREDENTIALS && <Card className="w-full shadow-none">
         <CardContent className="p-7">
           <div className="flex flex-col">
             <h3 className="font-bold">Change Password</h3>
@@ -332,7 +333,7 @@ export const EditProfileForm = ({ user }: EditProfileFormProps) => {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card>}
     </div>
   );
 };

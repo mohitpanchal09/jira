@@ -1,4 +1,4 @@
-import { Status } from "@/generated/prisma"
+import { AuthProvider, Status } from "@/generated/prisma"
 
 export enum UserRole{
     ADMIN = "ADMIN" ,
@@ -29,6 +29,7 @@ export type User = {
     createdAt:Date,
     password?:string | null
     image?:string | null
+    provider:AuthProvider
 }
 
 export type Task = {
