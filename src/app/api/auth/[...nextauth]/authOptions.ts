@@ -6,6 +6,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google";
 
+
+
 export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
@@ -27,6 +29,7 @@ export const authOptions: AuthOptions = {
               provider: AuthProvider.CREDENTIALS
             },
           });
+          console.log("🚀 ~ authorize ~ user:", user)
 
           if (!user) {
             throw new Error("No user found with that username");
@@ -41,6 +44,7 @@ export const authOptions: AuthOptions = {
             id: user.id,
             username: user.username,
             email: user.email,
+            image:user.image
           };
         } catch (err) {
           if (err instanceof Error) {
@@ -71,6 +75,9 @@ export const authOptions: AuthOptions = {
   callbacks: {
 
     async signIn({ user, account, profile }) {
+      console.log("🚀 ~ signIn ~ profile:", profile)
+      console.log("🚀 ~ signIn ~ account:", account)
+      console.log("🚀 ~ signIn ~ user:", user)
       if (account?.provider === 'github') {
         const githubUsername = (profile as any)?.login || user.name;
 
@@ -116,26 +123,35 @@ export const authOptions: AuthOptions = {
               username: profile?.email?.split('@')[0] || "",
               provider: AuthProvider.GOOGLE,
               password: "", // or null if allowed
+              //@ts-ignore - image there
+              image:profile?.picture
             },
           });
 
           user.id = newUser.id;
           user.username = newUser.username;
+          user.image = newUser.image
         } else {
           user.id = existingUser.id;
           user.username = existingUser.username;
+          user.image = existingUser.image
         }
       }
 
       return true;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token, user,trigger,session }) {
       if (user) {
         token.id = user.id as number;
         token.email = user.email;
         token.username = (user as any).username; 
+        token.image = user.image
       }
+      if (trigger === "update" && session) {
+          token.username = session.username;
+          token.image = session.image; 
+        }
       return token;
     },
 
@@ -143,7 +159,8 @@ export const authOptions: AuthOptions = {
       if (token) {
         session.user.id = token.id;
         session.user.email = token.email;
-        session.user.username = token.username
+        session.user.username = token.username;
+        session.user.image = token.image;
       }
       return session;
     },

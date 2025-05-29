@@ -21,6 +21,7 @@ model User {
   firstname   String?
   password    String?
   lastname    String?
+  image       String?
   provider    AuthProvider @default(CREDENTIALS)
   createdAt   DateTime     @default(now())
   workspace   Workspace[]

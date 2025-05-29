@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { Loader, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,14 +39,23 @@ function UserButton() {
   const username = session?.user?.username  || "User";
   const email = session?.user?.email;
   const avatarFallback = username.charAt(0).toUpperCase();
+  //@ts-expect-error-image
+  const image = session?.user?.image ;
 
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="outline-none relative">
         <Avatar className="size-10 transition-75 border border-neutral-300">
-          <AvatarFallback className="hover:bg-neutral-300 bg-neutral-200 font-medium text-neutral-500 flex items-center justify-center">
+          {image ? (
+            <AvatarImage
+              src={image}
+              alt={username}
+              className="object-cover"
+            />
+          ):<AvatarFallback className="hover:bg-neutral-300 bg-neutral-200 font-medium text-neutral-500 flex items-center justify-center">
             {avatarFallback}
-          </AvatarFallback>
+          </AvatarFallback>}
+          
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -57,9 +66,15 @@ function UserButton() {
       >
         <div className="flex flex-col items-center justify-center gap-2 px-2.5 py-4">
           <Avatar className="size-10 transition-75 border border-neutral-300">
-            <AvatarFallback className="hover:bg-neutral-300 bg-neutral-200 font-medium text-neutral-500 flex items-center justify-center">
-              {avatarFallback}
-            </AvatarFallback>
+             {image ? (
+            <AvatarImage
+              src={image}
+              alt={username}
+              className="object-cover"
+            />
+          ):<AvatarFallback className="hover:bg-neutral-300 bg-neutral-200 font-medium text-neutral-500 flex items-center justify-center">
+            {avatarFallback}
+          </AvatarFallback>}
           </Avatar>
           <div className="flex flex-col items-center justify-center">
             <p className="text-sm font-medium text-neutral-900">

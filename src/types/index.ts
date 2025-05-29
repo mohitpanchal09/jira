@@ -28,6 +28,7 @@ export type User = {
     lastname?:string | null,
     createdAt:Date,
     password?:string | null
+    image?:string | null
 }
 
 export type Task = {

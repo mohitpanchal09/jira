@@ -5,21 +5,25 @@ import { Separator } from '@/components/ui/separator'
 import { Navigation } from '@/components/Navigation'
 import WorkspaceSwitcherWrapper from './WorkspaceSwitcherWrapper'
 import Projects from './Projects'
+import ProfileButton from './ProfileButton'
 
 type Props = {}
 
 function Sidebar({}: Props) {
   return (
-    <aside className='h-full bg-neutral-100 p-4 w-full'>
+   <aside className='h-full bg-neutral-100 p-4 w-full flex flex-col justify-between'>
+      <div>
         <Link href={'/'}>
-        <Image src={'/logo.svg'}alt='logo' width={164} height={48}/>
+          <Image src={'/logo.svg'} alt='logo' width={164} height={48} />
         </Link>
-        <Separator className='my-4'/>
-        <WorkspaceSwitcherWrapper/>
-        <Separator className='my-4'/>
-        <Navigation/>
-        <Separator className='my-4'/>
-        <Projects/>
+        <Separator className='my-4' />
+        <WorkspaceSwitcherWrapper />
+        <Separator className='my-4' />
+        <Navigation />
+        <Separator className='my-4' />
+        <Projects />
+      </div>
+      <ProfileButton />
     </aside>
   )
 }
