@@ -15,19 +15,22 @@ datasource db {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  email       String?
-  username    String       @unique
-  firstname   String?
-  password    String?
-  lastname    String?
-  image       String?
-  provider    AuthProvider @default(CREDENTIALS)
-  createdAt   DateTime     @default(now())
-  workspace   Workspace[]
-  memberships Member[]
-  project     Project[]
-  tasks       Task[]
+  id           Int          @id @default(autoincrement())
+  email        String?
+  username     String       @unique
+  firstname    String?
+  password     String?
+  lastname     String?
+  image        String?
+  verified     Boolean      @default(false)
+  otp          Int?
+  otpCreatedAt DateTime?
+  provider     AuthProvider @default(CREDENTIALS)
+  createdAt    DateTime     @default(now())
+  workspace    Workspace[]
+  memberships  Member[]
+  project      Project[]
+  tasks        Task[]
 }
 
 model Workspace {

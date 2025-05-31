@@ -37,13 +37,7 @@ export default function RegistrationMailTemplate({
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
-            <Img
-              src={`https://jira-bucket09.s3.eu-north-1.amazonaws.com/profile-1748710692633-trekflow-logo.png`} // Ensure this file exists on your server
-              width="40"
-              height="40"
-              alt="TrekFlow Logo"
-              style={{ marginRight: "12px" }}
-            />
+           
             <Text style={trekflowBrand}>
               TrekFlow
             </Text>

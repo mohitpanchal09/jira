@@ -7,7 +7,7 @@ import { authOptions } from "../api/auth/[...nextauth]/authOptions";
 export default async function Home() {
   const session = await getServerSession(authOptions as AuthOptions);
   if (!session){
-   redirect("/sign-in");
+   redirect("/home");
   }else{
     let workspaces: Workspace[] = [];
     workspaces = session?.user?.id ? await getWorkspaces(session?.user?.id) : [];

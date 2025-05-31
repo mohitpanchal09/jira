@@ -1,5 +1,7 @@
+import RegistrationMailTemplate from "@/components/RegistrationMailTemplate";
 import { registerUser } from "@/services/authService";
 import { registerSchema } from "@/validations/register.validations";
+import { Resend } from 'resend';
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -15,7 +17,37 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
 
         const user = await registerUser(body)
-        return NextResponse.json({ message: "User registered successfully", user }, { status: 201 })
+
+        const otp = String(user.otp)
+
+        if (otp && user.email) {
+            const expiryMinutes = 10;
+            const resend = new Resend(process.env.RESEND_API_KEY);
+            const { data, error } = await resend.emails.send({
+                from: "send@trekflow.space",
+                to: [user.email],
+                subject: "OTP For TrekFlow Registration",
+                react: RegistrationMailTemplate({
+                    recipientName: user.username || "User", 
+                    otp,
+                    expiryMinutes,
+                    appName: "Treflow",
+                }),
+            });
+
+            if (error) {
+                console.error("Email sending error:", error);
+                return NextResponse.json(
+                    { message: "User registered, but failed to send OTP", error },
+                    { status: 500 }
+                );
+            }
+        }
+
+        return NextResponse.json(
+            { message: "User registered and OTP sent to email", user },
+            { status: 201 }
+        );
 
     } catch (err) {
         console.error("Registration error:", err);

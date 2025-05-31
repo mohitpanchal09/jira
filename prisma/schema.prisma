@@ -22,6 +22,9 @@ model User {
   password            String?
   lastname            String?
   image               String?
+  verified            Boolean     @default(false)
+  otp                 Int?         
+  otpCreatedAt        DateTime?
   provider            AuthProvider @default(CREDENTIALS)
   createdAt           DateTime    @default(now())
   workspace           Workspace[]
