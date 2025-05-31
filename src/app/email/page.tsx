@@ -1,5 +1,6 @@
 
-import { RegistrationMailTemplate } from '@/components/RegistrationMailTemplate'
+
+import RegistrationMailTemplate from '@/components/RegistrationMailTemplate'
 import React from 'react'
 
 type Props = {}

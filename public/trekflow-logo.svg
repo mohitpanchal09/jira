@@ -1,0 +1,25 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#0891B2" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F97066" />
+      <stop offset="100%" stop-color="#FB7185" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main logo shape - flowing path -->
+  <path d="M40 100C40 66.8629 66.8629 40 100 40V40C133.137 40 160 66.8629 160 100V100C160 133.137 133.137 160 100 160V160C66.8629 160 40 133.137 40 100V100Z" fill="url(#flowGradient)" />
+  
+  <!-- Inner circle -->
+  <circle cx="100" cy="100" r="30" fill="white" />
+  
+  <!-- Trek elements - directional arrows -->
+  <path d="M90 80L110 100L90 120" stroke="url(#accentGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Flow elements - curved lines -->
+  <path d="M65 65C72 58 80 55 90 55" stroke="white" stroke-width="4" stroke-linecap="round" />
+  <path d="M135 135C128 142 120 145 110 145" stroke="white" stroke-width="4" stroke-linecap="round" />
+</svg>
