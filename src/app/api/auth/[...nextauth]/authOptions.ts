@@ -29,7 +29,6 @@ export const authOptions: AuthOptions = {
               provider: AuthProvider.CREDENTIALS
             },
           });
-          console.log("🚀 ~ authorize ~ user:", user)
 
           if (!user) {
             throw new Error("No user found with that username");
@@ -38,6 +37,10 @@ export const authOptions: AuthOptions = {
           const isValid = await bcrypt.compare(credentials.password, user?.password as string);
           if (!isValid) {
             throw new Error("Invalid credentials");
+          }
+
+           if (!user.verified) {
+            throw new Error("Account not verified");
           }
 
           return {
@@ -75,9 +78,6 @@ export const authOptions: AuthOptions = {
   callbacks: {
 
     async signIn({ user, account, profile }) {
-      console.log("🚀 ~ signIn ~ profile:", profile)
-      console.log("🚀 ~ signIn ~ account:", account)
-      console.log("🚀 ~ signIn ~ user:", user)
       if (account?.provider === 'github') {
         const githubUsername = (profile as any)?.login || user.name;
 
@@ -92,6 +92,7 @@ export const authOptions: AuthOptions = {
               username: githubUsername,
               provider: AuthProvider.GITHUB,
               password: "",
+              verified:true
             },
           });
           user.id = res.id
@@ -124,7 +125,8 @@ export const authOptions: AuthOptions = {
               provider: AuthProvider.GOOGLE,
               password: "", // or null if allowed
               //@ts-ignore - image there
-              image:profile?.picture
+              image:profile?.picture,
+              verified:true
             },
           });
 

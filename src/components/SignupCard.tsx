@@ -62,7 +62,7 @@ export default function SignupCard() {
     e.preventDefault();
     setLoading(true)
     try {
-      const res = await axiosInstance.post("/verify-otp", {
+      const res = await axiosInstance.post("/verify", {
         username: username,
         otp,
       });
@@ -73,6 +73,7 @@ export default function SignupCard() {
         form.reset();
       }
     } catch (err) {
+      console.log("🚀 ~ onOtpSubmit ~ err:", err)
       //@ts-ignore
       toast.error(err.response?.data?.error || "Invalid OTP");
     }finally{
