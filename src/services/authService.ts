@@ -8,7 +8,7 @@ export async function registerUser({ email, password, username }: { email: strin
 
     const existingUser = await prisma.user.findUnique({
         where: {
-            username
+            username,provider:AuthProvider.CREDENTIALS
         }
     })
     if (existingUser) throw new Error("Username is taken")
