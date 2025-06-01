@@ -8,10 +8,17 @@ export async function registerUser({ email, password, username }: { email: strin
 
     const existingUser = await prisma.user.findUnique({
         where: {
-            username,provider:AuthProvider.CREDENTIALS
+            username
         }
     })
     if (existingUser) throw new Error("Username is taken")
+
+    const emailUsed = await prisma.user.findFirst({
+        where:{
+            provider:AuthProvider.CREDENTIALS,email
+        }
+    })
+    if(emailUsed) throw new Error("You are already registered")
 
     const otp = Number(generateOTP())
     const otpCreatedAt = new Date()
